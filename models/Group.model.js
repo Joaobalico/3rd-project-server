@@ -8,7 +8,7 @@ const groupSchema = new Schema(
     image: String,
     type: String,
     description: String,
-    users: String
+    users: []
   },
   {
     timestamps: true,
