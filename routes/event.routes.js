@@ -11,6 +11,12 @@ router.post("/event", (req, res, next) => {
     .catch((err) => next(err));
 });
 
+router.get('/events', (req, res, next) => {
+  Event.find()
+    .then((response) => res.json(response))
+    .catch((err) => res.json(err));
+});
+
 router.get("/event/:eventId", (req, res, next) => {
   const { eventId } = req.params;
 
