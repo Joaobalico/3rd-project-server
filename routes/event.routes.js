@@ -4,9 +4,9 @@ const mongoose = require("mongoose");
 const Event = require("../models/Event.model");
 
 router.post("/event", (req, res, next) => {
-  const { title, image, type, address, description } = req.body;
+  const { title, image, address, description } = req.body;
 
-  Event.create({ title, image, type, address, description })
+  Event.create({ title, image, address, description })
     .then((response) => res.json(response))
     .catch((err) => next(err));
 });
