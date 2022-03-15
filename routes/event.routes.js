@@ -32,7 +32,7 @@ router.get("/event/:eventId", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
-router.put("/event/:eventId", (req, res, next) => {
+router.put("/event/:eventId", isAuthenticated, (req, res, next) => {
   const { eventId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(eventId)) {
@@ -47,7 +47,6 @@ router.put("/event/:eventId", (req, res, next) => {
 
 router.put("/attend-event/:eventId", isAuthenticated, (req, res, next) => {
   const { eventId } = req.params;
-  // console.log(req.params);
   const user = req.payload;
   // console.log(user);
 
@@ -81,7 +80,7 @@ router.delete("/event/:eventId", (req, res, next) => {
   }
   Event.findByIdAndRemove(eventId)
     .then(() =>
-      res.json({ message: `Project with ${eventId} was removed successfully` })
+      res.json({ message: `Event with ${eventId} was removed successfully` })
     )
     .catch((err) => res.json(err));
 });

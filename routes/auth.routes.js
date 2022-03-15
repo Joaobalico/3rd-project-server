@@ -94,6 +94,7 @@ router.post("/login", (req, res, next) => {
 
   // Search the database for a user with the username submitted in the form
   User.findOne({ username })
+  .populate('events')
     .then((user) => {
       // If the user isn't found, send the message that user provided wrong credentials
       if (!user) {
@@ -106,8 +107,8 @@ router.post("/login", (req, res, next) => {
           return res.status(400).json({ errorMessage: "Wrong credentials." });
         }
         //jwt
-        const { _id, username } = user;
-        const payload = { _id, username };
+        const { _id, username, events } = user;
+        const payload = { _id, username, events };
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
           algorithm: "HS256",
           expiresIn: "12h",
@@ -127,12 +128,27 @@ router.post("/login", (req, res, next) => {
 });
 
 router.get("/logout", isLoggedIn, (req, res) => {
+  console.log(user)
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).json({ errorMessage: err.message });
     }
     res.json({ message: "Done" });
   });
+});
+
+router.delete("/profile/:profileId", isLoggedIn, (req, res) => {
+  const { profileId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(profileId)) {
+    res.status(400).json({ message: "Specified Id is not valid" });
+    return;
+  }
+  User.findByIdAndDelete(profileId)
+    .then(() =>
+      res.json({ message: `User with ${profileId} was removed successfully` })
+    )
+    .catch((err) => res.json(err));
 });
 
 module.exports = router;
