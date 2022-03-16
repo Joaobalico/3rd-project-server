@@ -114,6 +114,8 @@ router.post("/login", (req, res, next) => {
           expiresIn: "12h",
         });
 
+        console.log(authToken)
+
         // req.session.user = user._id; // ! better and safer but in this case we saving the entire user object
         return res.status(200).json({ authToken });
       });
