@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const mongoose = require("mongoose");
 
-const Group = require("../models/group.model");
+const Group = require("../models/Group.model");
 
 router.post("/group", (req, res, next) => {
   const { location, groupName, image, type, description } = req.body;

@@ -48,7 +48,7 @@ router.put("/event/:eventId", isAuthenticated, (req, res, next) => {
 router.put("/attend-event/:eventId", isAuthenticated, (req, res, next) => {
   const { eventId } = req.params;
   const user = req.payload;
-  // console.log(user);
+  console.log("The user is", user.events);
 
   Event.findByIdAndUpdate(
     eventId,
@@ -57,7 +57,7 @@ router.put("/attend-event/:eventId", isAuthenticated, (req, res, next) => {
   )
     .then((updatedEvent) => {
       // console.log(updatedEvent);
-      console.log(`CONSOLE.LOG:${user._id}`);
+      // console.log(`CONSOLE.LOG:${user._id}`);
       return User.findByIdAndUpdate(
         user._id,
         { $push: { events: updatedEvent._id } },
@@ -65,7 +65,7 @@ router.put("/attend-event/:eventId", isAuthenticated, (req, res, next) => {
       );
     })
     .then((updatedUser) => {
-      console.log(updatedUser);
+      // console.log(updatedUser);
       res.json(updatedUser);
     })
     .catch((err) => res.json(err));

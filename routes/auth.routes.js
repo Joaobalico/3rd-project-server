@@ -17,7 +17,7 @@ const isLoggedIn = require("../middleware/isLoggedIn");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 router.get("/verify", isAuthenticated, (req, res, next) => {
-  console.log("req.payload", req.payload);
+  // console.log("req.payload", req.payload);
 
   res.status(200).json(req.payload);
 });
@@ -137,6 +137,16 @@ router.get("/logout", isLoggedIn, (req, res) => {
     }
     res.json({ message: "Done" });
   });
+});
+
+router.get("/profile", isAuthenticated, (req, res, next) => {
+  const user = req.payload
+  console.log("the user:", user._id);
+
+  User.findById(user._id)
+  .populate("events")
+    .then((response) => res.json(response))
+    .catch((err) => res.json(err));
 });
 
 router.delete("/profile/:profileId", isLoggedIn, (req, res) => {
